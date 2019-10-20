@@ -26,14 +26,14 @@ public class GVisionActivity extends AppCompatActivity {
 
 
 
-    SurfaceView surfaceView;
-    TextView txtBarcodeValue;
+    private SurfaceView surfaceView;
+    private TextView txtBarcodeValue,txtCount;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    Button btnAction;
-    String intentData = "";
-    boolean isEmail = false;
+    private String intentData = "";
+    private int countNum = 0;
+    private Button btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +43,19 @@ public class GVisionActivity extends AppCompatActivity {
 
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
-        btnAction = findViewById(R.id.btnAction);
+        txtCount=findViewById(R.id.txtCount);
+        btnNext=findViewById(R.id.btnNext);
 
-
-        btnAction.setOnClickListener(new View.OnClickListener() {
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (intentData.length() > 0) {
-                    Log.e("DATA",intentData);
+            public void onClick(View view) {
+                try {
+                    cameraSource.start(surfaceView.getHolder());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
-
 
     }
 
@@ -64,12 +65,12 @@ public class GVisionActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
 
         barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.ALL_FORMATS)
+                .setBarcodeFormats(Barcode.UPC_A)
                 .build();
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(1920, 1080)
-                .setAutoFocusEnabled(true) //you should add this feature
+                .setRequestedPreviewSize(640, 480)
+                .setAutoFocusEnabled(true)
                 .build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -82,18 +83,13 @@ public class GVisionActivity extends AppCompatActivity {
                         ActivityCompat.requestPermissions(GVisionActivity.this, new
                                 String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             }
-
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 cameraSource.stop();
@@ -104,41 +100,47 @@ public class GVisionActivity extends AppCompatActivity {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
-            }
 
+            }
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
 
-
                     txtBarcodeValue.post(new Runnable() {
-
                         @Override
                         public void run() {
 
-                            if (barcodes.valueAt(0).email != null) {
-                                txtBarcodeValue.removeCallbacks(null);
-                                intentData = barcodes.valueAt(0).email.address;
-                                txtBarcodeValue.setText(intentData);
-                                isEmail = true;
-                                btnAction.setText("ADD CONTENT TO THE MAIL");
-                            } else {
-                                isEmail = false;
-                                btnAction.setText("LAUNCH URL");
+                            if (barcodes.valueAt(0)!=null){
+                                countNum+=1;
+                                txtCount.setText("Succesfull Count: "+countNum);
                                 intentData = barcodes.valueAt(0).displayValue;
                                 txtBarcodeValue.setText(intentData);
-
+                                Toast.makeText(GVisionActivity.this,"Barcode scanned successfully",Toast.LENGTH_SHORT).show();
+                                cameraSource.stop();
                             }
+                            else {
+                                txtBarcodeValue.setText("No Detection!");
+                            }
+//                            if (barcodes.valueAt(0).email != null) {
+//                                txtBarcodeValue.removeCallbacks(null);
+//                                intentData = barcodes.valueAt(0).email.address;
+//                                txtBarcodeValue.setText(intentData);
+//                                //isEmail = true;
+//                                btnAction.setText("ADD CONTENT TO THE MAIL");
+//                            } else {
+//                                isEmail = false;
+//                                btnAction.setText("LAUNCH URL");
+//                                intentData = barcodes.valueAt(0).displayValue;
+//                                txtBarcodeValue.setText(intentData);
+//
+//                            }
                         }
                     });
-
                 }
             }
         });
     }
-
 
     @Override
     protected void onPause() {

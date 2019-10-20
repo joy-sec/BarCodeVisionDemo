@@ -11,6 +11,23 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
+        android:layout_height="300dp"/>
+
+    <TextView
+        android:id="@+id/txtBarcodeValue"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Barcode Detected"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/txtCount"
+        android:text="0"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
 

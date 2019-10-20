@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,29 +11,35 @@
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnAction"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true" />
+        android:layout_height="300dp" />
 
     <TextView
         android:id="@+id/txtBarcodeValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:text="No Barcode Detected"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
-
-
-    <Button
-        android:id="@+id/btnAction"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="ADD CONTENT IN THE MAIL" />
+        android:text="No Barcode Detected"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/txtCount"
+        android:text="0"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnNext"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:text="Next"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

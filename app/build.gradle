@@ -29,4 +29,14 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zbar:1.9.13'
     implementation 'com.google.android.gms:play-services-vision:11.8.0'
 
+    implementation 'org.mapsforge:mapsforge-map-android:0.12.0'
+    implementation 'com.caverock:androidsvg:1.4'
+    implementation 'org.mapsforge:mapsforge-themes:0.12.0'
+
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.4.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.9.0'
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+
 }
