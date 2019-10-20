@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnZBar,btnGV,btnMap,btnMapBox;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
+    private static final int REQUEST_EXTERNAL_WRITE_PERMISSION = 202;
+    private static final int REQUEST_LOCATION_PERMISSION = 203;
 
 
     @Override
@@ -61,26 +63,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            //nothing to do here
-        } else {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new
                     String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Log.v("TAG","Permission is granted");
-        }else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
-        }
+    }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Log.v("TAG","Permission is granted");
-        }else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 105);
-        }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_WRITE_PERMISSION);
+                    }
+                }
+                return;
+            }
+
+            case REQUEST_EXTERNAL_WRITE_PERMISSION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+                    }
+                }
+                return;
+            }
+        }
     }
 }

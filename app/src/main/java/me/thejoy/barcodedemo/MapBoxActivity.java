@@ -179,7 +179,7 @@ public class MapBoxActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
-                Timber.e("Error: " + throwable.getMessage());
+                Timber.e("Error: %s", throwable.getMessage());
                 Toast.makeText(MapBoxActivity.this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
